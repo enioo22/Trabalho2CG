@@ -10,27 +10,38 @@ using UnityEngine.UIElements;
 
 public class manager : MonoBehaviour
 {
+
     public DialogManager dialogmanager;
+    public TextMeshProUGUI UpgradeTitleRenovaveis;
+
     public TextMeshProUGUI TotalClicksText;
     public TextMeshProUGUI PowerGenerationPerSecondText;
     public TextMeshProUGUI Upgrade1ButtonText;
     public TextMeshProUGUI PowerPerClick;
+    public TextMeshProUGUI CO2EmissionText;
     public TextMeshProUGUI[] UpgradeButtonText;
 
-    float PowerValue = 0;
-    float PowerGenerationPerClick = 0;
-    float PowerGenerationPerSecond = 0;
-    double TotalClicks = 0;
+
+
+    float PowerValue;
+    float PowerGenerationPerClick;
+    float PowerGenerationPerSecond;
+    double TotalClicks;
+    double TotalCO2Emission;
+
     const int NumberOfUpgrades = 6;
-    public int EnergyType = 0; // 0 = Limpas, 1 = Sujas;
+    public int EnergyType = 0; // 0 = Renováveis, 1 = Não Renovaveis;
 
-    String[] UpgradeName = { "Hidrelétrica", "Usina Solar", "Usina Nuclear" };
-    String[] DirtyUpgradeName = { "Carvão", "Petróleo", "Diesel" };
-    double[] UpgradeCost = { 10, 10000, 100000000 };
-    double[] DirtyUpgradeCost = { 500, 1000, 2500000000 };
-    double[] UpgradeLevel = { 0, 0, 0 };
-    double[] DirtyUpgradeLevel = { 0, 0, 0 };
 
+    string[] UpgradeRenovaveis = { "EÃ³lica", "HidrelÃ©trica", "Biomassa", "Solar" };
+    double[] UpgradeCostRenovaveis = { 10, 1000, 100000, 200000 };
+    double[] UpgradeLevelRenovaveis = { 0, 0, 0, 0 };
+    double[] CO2EmissionPerUpgradeRenovaveis = { 13, 21, 0, 43 };  // EmissÃ£o em KCOâ‚‚/MW/h
+
+    string[] UpgradeNaoRenovaveis = { "GÃ¡s Natural", "Ã“leo", "CarvÃ£o", "Nuclear" };
+    double[] UpgradeCostNaoRenovaveis = { 500, 2000, 5000, 1000000 };
+    double[] UpgradeLevelNaoRenovaveis = { 0, 0, 0, 0 };
+    double[] CO2EmissionPerUpgradeNaoRenovaveis = { 486, 840, 1000, 13 }; // EmissÃ£o em KCOâ‚‚/MW/h
     public double getUpgradeCost(double InitialCost, int NumberOfUpgrades)
     {
         return InitialCost * Math.Pow(1.2, NumberOfUpgrades);
@@ -49,20 +60,33 @@ public class manager : MonoBehaviour
         }
     }
 
-    public void MakeUpgrade(int position)
+ // Upgrade para RenovÃ¡veis
+    public void MakeUpgradeRenovavel(int position)
     {
-        if (this.UpgradeCost[position] > this.TotalClicks)
+        if (this.UpgradeCostRenovaveis[position] > this.TotalClicks)
         {
-            Upgrade1ButtonText.color = Color.red;
-            Upgrade1ButtonText.color = Color.black;
+            Upgrade1ButtonText.color = Color.red; 
             return;
         }
-        this.TotalClicks -= this.UpgradeCost[position];
-        this.UpgradeLevel[position]++;
-        this.UpgradeCost[position] *= 1.2;
+        this.TotalClicks -= this.UpgradeCostRenovaveis[position];
+        this.UpgradeLevelRenovaveis[position]++;
+        this.UpgradeCostRenovaveis[position] *= 1.2;
         this.PowerGenerationPerClick++;
+        this.TotalCO2Emission += CO2EmissionPerUpgradeRenovaveis[position];
     }
-
+    // Upgrade para NÃ£o RenovÃ¡veis
+    public void MakeUpgradeNaoRenovavel(int position)
+    {
+        if (this.UpgradeCostNaoRenovaveis[position] > this.TotalClicks)
+        {
+            return; 
+        }
+        this.TotalClicks -= this.UpgradeCostNaoRenovaveis[position];
+        this.UpgradeLevelNaoRenovaveis[position]++;
+        this.UpgradeCostNaoRenovaveis[position] *= 1.3;
+        this.PowerGenerationPerClick += 2;
+        this.TotalCO2Emission += CO2EmissionPerUpgradeNaoRenovaveis[position];
+    }
     IEnumerator Waiter(float duration)
     {
         Debug.Log($"Started at {Time.time}, waiting for {duration} seconds");
@@ -75,33 +99,35 @@ public class manager : MonoBehaviour
         this.TotalClicks = 0;
         this.PowerGenerationPerSecond = this.PowerValue = 0;
         this.PowerGenerationPerClick = 1;
+        this.TotalCO2Emission = 0;
     }
 
     public String getUpgradeCost(int position)
     {
-        return this.UpgradeCost[position].ToString();
+        return this.UpgradeCostRenovaveis[position].ToString();
     }
-
+    
     private void Update()
     {
-        PowerPerClick.text = PowerGenerationPerClick.ToString() + " mW/Click";
+
+        this.TotalClicksText.text = Math.Round(this.TotalClicks, 2).ToString();
+        this.PowerPerClick.text = this.PowerGenerationPerClick.ToString() + "MW/Click";
+        this.CO2EmissionText.text = $"CO2 emitido: {Math.Round(this.TotalCO2Emission, 2)} KCO2";
         switch (EnergyType)
         {
             case 0:
-                for (int i = 0; i < UpgradeName.Length; i++)
+                for (int i = 0; i < UpgradeRenovaveis.Length; i++)
                 {
-                    UpgradeButtonText[i].text = UpgradeName[i] + "\nNível: " + (UpgradeLevel[i]) + "\nCusto: " + Math.Round(UpgradeCost[i], 2);
+                    UpgradeButtonText[i].text = UpgradeRenovaveis[i] + "\nNível: " + (UpgradeLevelRenovaveis[i]) + "\nCusto: " + Math.Round(UpgradeCostRenovaveis[i], 2);
                 }
                 break;
             case 1:
-                for (int i = 0; i < DirtyUpgradeName.Length; i++)
+                for (int i = 0; i < UpgradeNaoRenovaveis.Length; i++)
                 {
-                    UpgradeButtonText[i].text = DirtyUpgradeName[i] + "\nNível: " + (DirtyUpgradeLevel[i]) + "\nCusto: " + Math.Round(DirtyUpgradeCost[i], 2);
+                    UpgradeButtonText[i].text = UpgradeNaoRenovaveis[i] + "\nNível: " + (UpgradeLevelNaoRenovaveis[i]) + "\nCusto: " + Math.Round(UpgradeCostNaoRenovaveis[i], 2);
                 }
                 break;
+
         }
     }
-
-
-
 }

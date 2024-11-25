@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class UIManager : MonoBehaviour
 {
@@ -9,8 +11,9 @@ public class UIManager : MonoBehaviour
     public GameObject PanelUpgrades;
     public Sprite CleanEnergySprite;
     public Sprite DirtyEnergySprite;
-    public Button UpgradesShow;
-    public Button UpgradeTypeChange;
+    public UnityEngine.UI.Button UpgradesShow;
+    public UnityEngine.UI.Button UpgradeTypeChange;
+    public TextMeshProUGUI UpgradeTypeText;
     public manager manager;
 
 
@@ -26,8 +29,12 @@ public class UIManager : MonoBehaviour
 
     public void onClickChangeEnergyType()
     {
-        if (manager.EnergyType == 0) { manager.EnergyType = 1; }
-        else { manager.EnergyType = 0; }
+        if (manager.EnergyType == 0) 
+        { 
+            manager.EnergyType = 1;
+            UpgradeTypeText.text = "Não Renováveis";
+        }
+        else { manager.EnergyType = 0; UpgradeTypeText.text = "Renováveis"; }
     }
 
     // Start is called before the first frame update
