@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,6 +22,7 @@ public class manager : MonoBehaviour
     public TextMeshProUGUI CO2EmissionText;
     public TextMeshProUGUI[] UpgradeButtonText;
 
+    public float target;
 
 
     float PowerValue;
@@ -28,6 +30,8 @@ public class manager : MonoBehaviour
     float PowerGenerationPerSecond;
     double TotalClicks;
     double TotalCO2Emission;
+
+    float clickrotation;
 
     const int NumberOfUpgrades = 6;
     public int EnergyType = 0; // 0 = Renováveis, 1 = Não Renovaveis;
@@ -54,15 +58,18 @@ public class manager : MonoBehaviour
         this.TotalClicks += this.PowerGenerationPerClick;
         this.PowerValue += this.PowerGenerationPerClick;
         this.TotalClicksText.text = Math.Round(this.TotalClicks, 2).ToString();
-        if(PowerValue >= 1)
+        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.z, target, ref clickrotation, 0.1f);
+        if(PowerValue >= 10)
         {
             dialogmanager.callDialog(0);
         }
+        transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
  // Upgrade para RenovÃ¡veis
     public void MakeUpgradeRenovavel(int position)
-    {
+    {   
+
         if (this.UpgradeCostRenovaveis[position] > this.TotalClicks)
         {
             Upgrade1ButtonText.color = Color.red; 

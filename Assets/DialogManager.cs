@@ -111,10 +111,6 @@ public class DialogManager : MonoBehaviour
         dialogoAtual = id;
         DialogPanel.SetActive(true);
         
-        
-        Debug.Log(dialogoAtual);
-        Debug.Log(stepAtualDialogo);
-        Debug.Log(dialogo.Count);
         DialogBoxHead.sprite = getDialogBoxHeadSprite(dialogo[stepAtualDialogo].head);
         DialogBoxText.text = dialogo[stepAtualDialogo].text;
         DialogBoxTitle.text = dialogo[stepAtualDialogo].title;
