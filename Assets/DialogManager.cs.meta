@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 62c7c180c33d04a4395ab29c11833554
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - TutorialCrazyCientistHeadSprite: {fileID: 21300000, guid: 9cf8e12b0a1ffa6449b374f142dbb2e1, type: 3}
+  - DialogBoxHead: {instanceID: 0}
+  - DialogPanel: {instanceID: 0}
+  - DialogBoxTitle: {instanceID: 0}
+  - DialogBoxText: {instanceID: 0}
+  - DialogBoxRenderer: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,46 @@
+{
+  "TutorialDialog": [
+    {
+      "head": 1,
+      "title": "??????",
+      "text": "FOI VOCÊ QUE GEROU ESSA ENERGIA? O QUE VOCÊ FEZ????"
+    },
+    {
+      "head": 0,
+      "title": "Você",
+      "text": "MEU DEUS O QUE É VOCÊ E PORQUE VOCÊ APARECEU DO NADA??"
+    },
+    {
+      "head": 1,
+      "title": "Magi-Cientista Enerdhio",
+      "text": "Calma, eu sou o  Magi-Cientista Enerdhio."
+    },
+    {
+      "head": 0,
+      "title": "Você",
+      "text": "Por que você fala como se isso explicasse alguma coisa?"
+    },
+    {
+      "head": 1,
+      "title": "Magi-Cientista Enerdhio",
+      "text": "Não importa agora, continue fazendo o que estava fazendo e vamos SALVAR ESSE MUNDO"
+    }
+  ],
+  "DefaultDialog": [
+    {
+      "head": 1,
+      "title": "Magi-Cientista Enerdhio",
+      "text": "VOCÊ ESTA ME OUVINDO???"
+    },
+    {
+      "head": 0,
+      "title": "Você",
+      "text": "infelizmente sim..."
+    },
+    {
+      "head": 1,
+      "title": "Magi-Cientista Enerdhio",
+      "text": "Show de bola."
+    }
+  ]
+}

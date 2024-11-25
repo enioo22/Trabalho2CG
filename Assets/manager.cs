@@ -7,24 +7,29 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
+
 public class manager : MonoBehaviour
 {
-
+    public DialogManager dialogmanager;
     public TextMeshProUGUI TotalClicksText;
     public TextMeshProUGUI PowerGenerationPerSecondText;
     public TextMeshProUGUI Upgrade1ButtonText;
     public TextMeshProUGUI PowerPerClick;
     public TextMeshProUGUI[] UpgradeButtonText;
 
-    float PowerValue;
-    float PowerGenerationPerClick;
-    float PowerGenerationPerSecond;
-    double TotalClicks;
+    float PowerValue = 0;
+    float PowerGenerationPerClick = 0;
+    float PowerGenerationPerSecond = 0;
+    double TotalClicks = 0;
     const int NumberOfUpgrades = 6;
+    public int EnergyType = 0; // 0 = Limpas, 1 = Sujas;
 
     String[] UpgradeName = { "Hidrelétrica", "Usina Solar", "Usina Nuclear" };
+    String[] DirtyUpgradeName = { "Carvão", "Petróleo", "Diesel" };
     double[] UpgradeCost = { 10, 10000, 100000000 };
+    double[] DirtyUpgradeCost = { 500, 1000, 2500000000 };
     double[] UpgradeLevel = { 0, 0, 0 };
+    double[] DirtyUpgradeLevel = { 0, 0, 0 };
 
     public double getUpgradeCost(double InitialCost, int NumberOfUpgrades)
     {
@@ -37,6 +42,11 @@ public class manager : MonoBehaviour
     {
         this.TotalClicks += this.PowerGenerationPerClick;
         this.PowerValue += this.PowerGenerationPerClick;
+        this.TotalClicksText.text = Math.Round(this.TotalClicks, 2).ToString();
+        if(PowerValue >= 1)
+        {
+            dialogmanager.callDialog(0);
+        }
     }
 
     public void MakeUpgrade(int position)
@@ -74,11 +84,21 @@ public class manager : MonoBehaviour
 
     private void Update()
     {
-        this.TotalClicksText.text = Math.Round(this.TotalClicks, 2).ToString();
-        this.PowerPerClick.text = this.PowerGenerationPerClick.ToString() + "mW/Click";
-        for(int i = 0; i<3; i++)
+        PowerPerClick.text = PowerGenerationPerClick.ToString() + " mW/Click";
+        switch (EnergyType)
         {
-            this.UpgradeButtonText[i].text = this.UpgradeName[i] + "\nNível: " + (this.UpgradeLevel[i]) + "\nCusto: " + Math.Round(this.UpgradeCost[i], 2);
+            case 0:
+                for (int i = 0; i < UpgradeName.Length; i++)
+                {
+                    UpgradeButtonText[i].text = UpgradeName[i] + "\nNível: " + (UpgradeLevel[i]) + "\nCusto: " + Math.Round(UpgradeCost[i], 2);
+                }
+                break;
+            case 1:
+                for (int i = 0; i < DirtyUpgradeName.Length; i++)
+                {
+                    UpgradeButtonText[i].text = DirtyUpgradeName[i] + "\nNível: " + (DirtyUpgradeLevel[i]) + "\nCusto: " + Math.Round(DirtyUpgradeCost[i], 2);
+                }
+                break;
         }
     }
 
