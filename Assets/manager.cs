@@ -34,7 +34,7 @@ public class manager : MonoBehaviour
     float clickrotation;
 
     const int NumberOfUpgrades = 6;
-    public int EnergyType = 0; // 0 = Renováveis, 1 = Não Renovaveis;
+    public int EnergyType = 0; // 0 = Renovï¿½veis, 1 = Nï¿½o Renovaveis;
 
 
     string[] UpgradeRenovaveis = { "EÃ³lica", "HidrelÃ©trica", "Biomassa", "Solar" };
@@ -119,19 +119,19 @@ public class manager : MonoBehaviour
 
         this.TotalClicksText.text = Math.Round(this.TotalClicks, 2).ToString();
         this.PowerPerClick.text = this.PowerGenerationPerClick.ToString() + "MW/Click";
-        this.CO2EmissionText.text = $"CO2 emitido: {Math.Round(this.TotalCO2Emission, 2)} KCO2";
+        this.CO2EmissionText.text = $"CO2 emitido: {Math.Round(this.TotalCO2Emission, 2)} KGCO2";
         switch (EnergyType)
         {
             case 0:
                 for (int i = 0; i < UpgradeRenovaveis.Length; i++)
                 {
-                    UpgradeButtonText[i].text = UpgradeRenovaveis[i] + "\nNível: " + (UpgradeLevelRenovaveis[i]) + "\nCusto: " + Math.Round(UpgradeCostRenovaveis[i], 2);
+                    UpgradeButtonText[i].text = UpgradeRenovaveis[i] + "\nNï¿½vel: " + UpgradeLevelRenovaveis[i] + "\nCusto: " + Math.Round(UpgradeCostRenovaveis[i], 2);
                 }
                 break;
             case 1:
                 for (int i = 0; i < UpgradeNaoRenovaveis.Length; i++)
                 {
-                    UpgradeButtonText[i].text = UpgradeNaoRenovaveis[i] + "\nNível: " + (UpgradeLevelNaoRenovaveis[i]) + "\nCusto: " + Math.Round(UpgradeCostNaoRenovaveis[i], 2);
+                    UpgradeButtonText[i].text = UpgradeNaoRenovaveis[i] + "\nNï¿½vel: " + UpgradeLevelNaoRenovaveis[i] + "\nCusto: " + Math.Round(UpgradeCostNaoRenovaveis[i], 2);
                 }
                 break;
 
