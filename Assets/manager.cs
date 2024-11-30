@@ -43,7 +43,7 @@ public class manager : MonoBehaviour
     float clickrotation;
 
     const int NumberOfUpgrades = 6;
-    public int EnergyType = 0; // 0 = Renováveis, 1 = Não Renovaveis;
+    public int EnergyType = 0; // 0 = Renovï¿½veis, 1 = Nï¿½o Renovaveis;
 
 
     string[] UpgradeRenovaveis = { "EÃ³lica", "HidrelÃ©trica", "Biomassa", "Solar" };
@@ -126,6 +126,20 @@ public class manager : MonoBehaviour
             this.TotalCO2Emission += CO2EmissionPerUpgradeRenovaveis[position];
             return;
         }
+        if (this.UpgradeCostRenovaveis[position] > this.TotalClicks)
+        {
+            Upgrade1ButtonText.color = Color.red; 
+            return;
+        }
+        this.TotalClicks -= this.UpgradeCostRenovaveis[position];
+        this.UpgradeLevelRenovaveis[position]++;
+        this.UpgradeCostRenovaveis[position] *= 1.2;
+        this.PowerGenerationPerClick++;
+        this.TotalCO2Emission += CO2EmissionPerUpgradeRenovaveis[position];
+    }
+    // Upgrade para NÃ£o RenovÃ¡veis
+    public void MakeUpgradeNaoRenovavel(int position)
+    {
         if (this.UpgradeCostNaoRenovaveis[position] > this.TotalClicks)
         {
             return;
@@ -152,24 +166,18 @@ public class manager : MonoBehaviour
         this.PowerGenerationPerClick = 1;
         this.TotalCO2Emission = 0;
     }
-
-    public String getUpgradeCost(int position)
-    {
-        return this.UpgradeCostRenovaveis[position].ToString();
-
-    }
     
     private void Update()
     {
         this.TotalClicksText.text = Math.Round(this.TotalClicks, 2).ToString();
         this.PowerPerClick.text = this.PowerGenerationPerClick.ToString() + "MW/Click";
-        this.CO2EmissionText.text = $"CO2 emitido: {Math.Round(this.TotalCO2Emission, 2)} KCO2";
+        this.CO2EmissionText.text = $"CO2 emitido: {Math.Round(this.TotalCO2Emission, 2)} KGCO2";
         switch (EnergyType)
         {
             case 0:
                 for (int i = 0; i < UpgradeRenovaveis.Length; i++)
-                {   
-                    UpgradeButtonText[i].text = UpgradeRenovaveis[i] + "\nNível: " + (UpgradeLevelRenovaveis[i]) + "\nCusto: " + Math.Round(UpgradeCostRenovaveis[i], 2);
+                {
+                    UpgradeButtonText[i].text = UpgradeRenovaveis[i] + "\nNÃ­vel: " + (UpgradeLevelRenovaveis[i]) + "\nCusto: " + Math.Round(UpgradeCostRenovaveis[i], 2);
                     if(TotalClicks < UpgradeCostRenovaveis[i])
                     {
                         upgradeButton[i].interactable = false;
@@ -178,11 +186,11 @@ public class manager : MonoBehaviour
                     upgradeButton[i].interactable = true;
 
                 }
-                break;
+                    break;
             case 1:
                 for (int i = 0; i < UpgradeNaoRenovaveis.Length; i++)
                 {
-                    UpgradeButtonText[i].text = UpgradeNaoRenovaveis[i] + "\nNível: " + (UpgradeLevelNaoRenovaveis[i]) + "\nCusto: " + Math.Round(UpgradeCostNaoRenovaveis[i], 2);
+                    UpgradeButtonText[i].text = UpgradeNaoRenovaveis[i] + "\nNÃ­vel: " + UpgradeLevelNaoRenovaveis[i] + "\nCusto: " + Math.Round(UpgradeCostNaoRenovaveis[i], 2);
 
                     if (TotalClicks < UpgradeCostNaoRenovaveis[i])
                     {
