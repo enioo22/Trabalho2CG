@@ -156,6 +156,21 @@ public class manager : MonoBehaviour
 
 
     }
+    public void MakeUpgrade(int position)
+    {
+        if (EnergyType == 0)
+        {
+            
+            MakeUpgradeRenovavel(position);
+        }
+        else
+        {
+            
+            MakeUpgradeNaoRenovavel(position);
+        }
+    }
+
+    
     IEnumerator Waiter(float duration)
     {
         Debug.Log($"Started at {Time.time}, waiting for {duration} seconds");
