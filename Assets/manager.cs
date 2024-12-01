@@ -83,8 +83,12 @@ public class manager : MonoBehaviour
         if(TotalClicks == 10)
         {
             dialogmanager.callDialog(0);
-            upgradesmenu1.SetActive(true);
-
+            upgradesmenu1.SetActive(true);     
+        }
+        if(TotalClicks >UpgradeCostRenovaveis[0])
+        {
+            upgrades[0].SetActive(true);
+            
         }
         if(TotalClicks > UpgradeCostRenovaveis[1])
         {
@@ -104,7 +108,6 @@ public class manager : MonoBehaviour
  // Upgrade para Renováveis
     public void MakeUpgradeRenovavel(int position)
     {
-        powerpersecondtext.SetActive(true);
 
         if(EnergyType == 0) {
             if (this.UpgradeCostRenovaveis[position] > this.TotalClicks)
@@ -116,7 +119,7 @@ public class manager : MonoBehaviour
             ++this.UpgradeLevelRenovaveis[position];
             double upgradelevel = this.UpgradeLevelRenovaveis[position];
 
-            if (upgradelevel >= 1 && upgradelevel <= 4)
+            if (upgradelevel >= 1 && upgradelevel <= 3)
             {
 
                 GameObject.Find("/CanvasMain/Backgroundentities/Eolicos/Eolico" + upgradelevel).SetActive(true);
@@ -136,25 +139,31 @@ public class manager : MonoBehaviour
             PowerPerClickBio = UpgradeLevelRenovaveis[2] * 25;
             PowerPerClickSolar = UpgradeLevelRenovaveis[3] * 100;
 
-            PowerPerClickGas = UpgradeLevelNaoRenovaveis[0] * 2;
-            PowerPerClickOleo = UpgradeLevelNaoRenovaveis[1] * 10;
-            PowerPerClickCarvao = UpgradeLevelNaoRenovaveis[2] * 15;
-            PowerPerClickNuke = UpgradeLevelNaoRenovaveis[3] * 50;
+            
 
 
 
             return;
         }
+        
+    }
+
+    void MakeUpgradeNaoRenovavel(int position)
+    {
         if (this.UpgradeCostNaoRenovaveis[position] > this.TotalClicks)
         {
-            Upgrade1ButtonText.color = Color.red; 
+            Upgrade1ButtonText.color = Color.red;
             return;
         }
-        this.TotalClicks -= this.UpgradeCostRenovaveis[position];
+        this.TotalClicks -= this.UpgradeCostNaoRenovaveis[position];
         this.UpgradeLevelNaoRenovaveis[position]++;
         this.UpgradeCostNaoRenovaveis[position] *= 1.15;
-        this.PowerGenerationPerClick++;
         this.TotalCO2Emission += CO2EmissionPerUpgradeNaoRenovaveis[position];
+
+        PowerPerClickGas = UpgradeLevelNaoRenovaveis[0] * 2;
+        PowerPerClickOleo = UpgradeLevelNaoRenovaveis[1] * 10;
+        PowerPerClickCarvao = UpgradeLevelNaoRenovaveis[2] * 15;
+        PowerPerClickNuke = UpgradeLevelNaoRenovaveis[3] * 50;
     }
     // Upgrade para Não Renováveis
     public void upgradeVisual(int upgrade)
@@ -199,6 +208,26 @@ public class manager : MonoBehaviour
         }
         return Math.Round(numero, 2).ToString();
 
+
+    }
+    public void MakeUpgrade(int position)
+    {   powerpersecondtext.SetActive(true);
+        if (EnergyType == 0)
+        {
+            MakeUpgradeRenovavel(position);
+        }
+        else
+        {
+            MakeUpgradeNaoRenovavel(position);
+        }
+    }
+
+    
+    IEnumerator Waiter(float duration)
+    {
+        Debug.Log($"Started at {Time.time}, waiting for {duration} seconds");
+        yield return new WaitForSeconds(duration);
+        Debug.Log($"Ended at {Time.time}");
     }
     // Start is called before the first frame update
     void Start() 
