@@ -75,8 +75,12 @@ public class manager : MonoBehaviour
         if(TotalClicks == 10)
         {
             dialogmanager.callDialog(0);
-            upgradesmenu1.SetActive(true);
-
+            upgradesmenu1.SetActive(true);     
+        }
+        if(TotalClicks >UpgradeCostRenovaveis[0])
+        {
+            upgrades[0].SetActive(true);
+            
         }
         if(TotalClicks > UpgradeCostRenovaveis[1])
         {
@@ -108,7 +112,7 @@ public class manager : MonoBehaviour
             ++this.UpgradeLevelRenovaveis[position];
             double upgradelevel = this.UpgradeLevelRenovaveis[position];
 
-            if (upgradelevel >= 1 && upgradelevel <= 4)
+            if (upgradelevel >= 1 && upgradelevel <= 3)
             {
 
                 GameObject.Find("/CanvasMain/Backgroundentities/Eolicos/Eolico" + upgradelevel).SetActive(true);
@@ -171,13 +175,13 @@ public class manager : MonoBehaviour
     {
         this.TotalClicksText.text = Math.Round(this.TotalClicks, 2).ToString();
         this.PowerPerClick.text = this.PowerGenerationPerClick.ToString() + "MW/Click";
-        this.CO2EmissionText.text = $"CO2 emitido: {Math.Round(this.TotalCO2Emission, 2)} KGCO2";
+        this.CO2EmissionText.text = $"CO2 emitido: {Math.Round(this.TotalCO2Emission, 2)} KG de CO2";
         switch (EnergyType)
         {
             case 0:
                 for (int i = 0; i < UpgradeRenovaveis.Length; i++)
                 {
-                    UpgradeButtonText[i].text = UpgradeRenovaveis[i] + "\nNível: " + (UpgradeLevelRenovaveis[i]) + "\nCusto: " + Math.Round(UpgradeCostRenovaveis[i], 2);
+                    UpgradeButtonText[i].text = UpgradeRenovaveis[i] + "\nNível: " + UpgradeLevelRenovaveis[i] + "\nCusto: " + Math.Round(UpgradeCostRenovaveis[i], 2);
                     if(TotalClicks < UpgradeCostRenovaveis[i])
                     {
                         upgradeButton[i].interactable = false;
