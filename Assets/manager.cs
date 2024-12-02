@@ -313,17 +313,20 @@ public class manager : MonoBehaviour
     TotalClicksText.text = GetNumeroFormatado(TotalClicks);
     PowerGenerationPerClick = 1 + PowerPerClickEolica + PowerPerClickHidro + PowerPerClickBio + PowerPerClickSolar 
                                + PowerPerClickGas + PowerPerClickCarvao + PowerPerClickOleo + PowerPerClickNuke;
-    PowerGenerationPerSecond = 0.1f * (float)(PowerPerClickEolica + PowerPerClickHidro + PowerPerClickBio + PowerPerClickSolar);
+                               
+    PowerGenerationPerSecond = 0.1f * (float)(PowerPerClickEolica + PowerPerClickHidro + PowerPerClickBio + PowerPerClickSolar + 
+    PowerPerClickGas + PowerPerClickCarvao + PowerPerClickOleo + PowerPerClickNuke
+);
 
     PowerGenerationPerSecondText.text = GetNumeroFormatado(PowerGenerationPerSecond) + " MW/s";
     PowerPerClick.text = GetNumeroFormatado(PowerGenerationPerClick) + " MW/Click";
     CO2EmissionText.text = $"CO2 emitido: {Math.Round(TotalCO2Emission, 2)} KG de CO2";
 
-        UpgradeVisual0.interactable = (TotalClicks >= 10000 && upgradeVisualEolico1 == 0);
+        UpgradeVisual0.interactable = TotalClicks >= 10000 && upgradeVisualEolico1 == 0;
 
-        UpgradeVisual1.interactable = (TotalClicks >= 1000000 && UpgradeLevelRenovaveis[0] >= 100) && upgradeVisualEolico2 == 0 ;
+        UpgradeVisual1.interactable = TotalClicks >= 1000000 && UpgradeLevelRenovaveis[0] >= 100 && upgradeVisualEolico2 == 0 ;
 
-        UpgradeVisual2.interactable = (TotalClicks >= 1000000 && UpgradeLevelRenovaveis[1] >= 50) && upgradeVisualHidro1 == 0;
+        UpgradeVisual2.interactable = TotalClicks >= 1000000 && UpgradeLevelRenovaveis[1] >= 50 && upgradeVisualHidro1 == 0;
         UpgradeVisual3.interactable = false;
 
         switch (EnergyType)
