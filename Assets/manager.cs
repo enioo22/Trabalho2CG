@@ -154,6 +154,12 @@ public class manager : MonoBehaviour
                     GameObject.Find("/CanvasMain/Backgroundentities/Hidreletrica/corpo" + upgradelevel).SetActive(true);
                 }
                 break;
+            case 2:
+                if(upgradelevel < 6)
+                {
+                    GameObject.Find("/CanvasMain/Backgroundentities/Biomassa/corpo" + upgradelevel).SetActive(true);
+                }
+                break;
             case 3:
                 if (upgradelevel < 6)
                 {
@@ -194,6 +200,35 @@ public class manager : MonoBehaviour
             PowerPerClickNuke = UpgradeLevelNaoRenovaveis[3] * 50;
         }
 
+        double upgradelevel = UpgradeLevelNaoRenovaveis[position];
+
+            switch (position)
+        {
+            case 0:
+                if(upgradelevel < 4) { 
+                GameObject.Find("/CanvasMain/Backgroundentities/GasNatural/corpo" + upgradelevel).SetActive(true);
+                }
+                break;
+
+            case 1:
+                if (upgradelevel < 4)
+                {
+                    GameObject.Find("/CanvasMain/Backgroundentities/Oleo/corpo" + upgradelevel).SetActive(true);
+                }
+                break;
+            case 2:
+                if(upgradelevel < 4)
+                {
+                    GameObject.Find("/CanvasMain/Backgroundentities/Carvao/corpo" + upgradelevel).SetActive(true);
+                }
+                break;
+            case 3:
+                if(upgradelevel < 4)
+                {
+                    GameObject.Find("/CanvasMain/Backgroundentities/Nuclear/corpo" + upgradelevel).SetActive(true);
+                }
+                break;
+        }
         TotalClicks -= totalCost;
     }
     private int GetPurchaseMultiplier()
