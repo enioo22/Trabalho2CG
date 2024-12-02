@@ -20,6 +20,15 @@ public class UIManager : MonoBehaviour
     public Sprite[] RenewableEnergySprites;
     public Sprite[] NonRenewableEnergySprites;
 
+    public Sprite[] EolicoSprites;
+    public Sprite[] HidroSprites;
+    public Sprite[] SolarSprites;
+
+    public UnityEngine.UI.Image[] EolicoImages;
+    public UnityEngine.UI.Image[] HidroImages;
+    public UnityEngine.UI.Image[] SolarImages;
+
+
     public GameObject Upgrade0;
     public GameObject Upgrade1;
 
@@ -45,6 +54,35 @@ public class UIManager : MonoBehaviour
     public void onClickCloseUpgrades2()
     {
         PanelUpgrades2.SetActive(false);
+    }
+
+    public void onClickChangeVisual(int position)
+    {
+        switch (position)
+        {
+            case 0:
+                for(int i = 0; i <9; i+=2)
+                {
+                    EolicoImages[i].sprite = EolicoSprites[2];
+                    EolicoImages[i+1].sprite = EolicoSprites[3];
+                }
+                break;
+
+            case 1:
+                for (int i = 0; i < 9; i += 2)
+                {
+                    EolicoImages[i].sprite = EolicoSprites[4];
+                    EolicoImages[i + 1].sprite = EolicoSprites[5];
+                }
+                break;
+            case 2:
+                for (int i = 0; i < 3; i++)
+                {
+                    HidroImages[i].sprite = HidroSprites[0];
+                }
+                break;
+        }   
+        
     }
 
     public void onClickChangeEnergyType()
