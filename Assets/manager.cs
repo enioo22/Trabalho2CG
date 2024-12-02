@@ -48,8 +48,6 @@ public class manager : MonoBehaviour
     const int NumberOfUpgrades = 6;
     public int EnergyType = 0; // 0 = Renov�veis, 1 = N�o Renovaveis;
     private int purchaseMultiplier = 1;
-    private readonly int[] multipliers = { 1, 10, 25, 100 };
-
 
     string[] UpgradeRenovaveis = { "Eólica", "Hidrelétrica", "Biomassa", "Solar" };
     double[] UpgradeCostRenovaveis = { 10, 1000, 100000, 200000 };
@@ -281,17 +279,25 @@ public class manager : MonoBehaviour
         return totalCost;
     }
     private void Update()
-    {
-        purchaseMultiplier = GetPurchaseMultiplier();
-        this.TotalClicksText.text = GetNumeroFormatado(TotalClicks);
-        PowerGenerationPerClick = 1 + PowerPerClickEolica + PowerPerClickHidro + PowerPerClickBio + PowerPerClickSolar + PowerPerClickGas + PowerPerClickCarvao + PowerPerClickOleo + PowerPerClickNuke;
-        PowerGenerationPerSecondText.text = GetNumeroFormatado(0.1 * PowerGenerationPerClick).ToString();
-        this.PowerPerClick.text = GetNumeroFormatado(PowerGenerationPerClick) + "MW/Click";
-        this.CO2EmissionText.text = $"CO2 emitido: {Math.Round(this.TotalCO2Emission, 2)} KG de CO2";
+{
+    purchaseMultiplier = GetPurchaseMultiplier();
 
-        UpgradeVisual0.interactable = TotalClicks > 10000;
+    // Atualiza os cálculos visuais
+    TotalClicksText.text = GetNumeroFormatado(TotalClicks);
+    PowerGenerationPerClick = 1 + PowerPerClickEolica + PowerPerClickHidro + PowerPerClickBio + PowerPerClickSolar 
+                               + PowerPerClickGas + PowerPerClickCarvao + PowerPerClickOleo + PowerPerClickNuke;
+    PowerGenerationPerSecond = 0.1f * (float)(PowerPerClickEolica + PowerPerClickHidro + PowerPerClickBio + PowerPerClickSolar);
 
-        UpgradeVisual1.interactable = TotalClicks >= 1000000 && UpgradeLevelRenovaveis[0] >= 100;
+    PowerGenerationPerSecondText.text = GetNumeroFormatado(PowerGenerationPerSecond) + " MW/s";
+    PowerPerClick.text = GetNumeroFormatado(PowerGenerationPerClick) + " MW/Click";
+    CO2EmissionText.text = $"CO2 emitido: {Math.Round(TotalCO2Emission, 2)} KG de CO2";
+
+    // Atualiza a geração passiva de energia
+    TotalClicks += PowerGenerationPerSecond * Time.deltaTime;
+    UpgradeVisual0.interactable = TotalClicks > 10000;
+    UpgradeVisual1.interactable = TotalClicks >= 1000000 && UpgradeLevelRenovaveis[0] >= 100;
+
+
 
         switch (EnergyType)
         {
