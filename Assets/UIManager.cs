@@ -23,11 +23,16 @@ public class UIManager : MonoBehaviour
     public Sprite[] EolicoSprites;
     public Sprite[] HidroSprites;
     public Sprite[] SolarSprites;
+    public Sprite[] BiomassaSprites;
+
+    public Sprite[] InfernoSprites;
 
     public UnityEngine.UI.Image[] EolicoImages;
     public UnityEngine.UI.Image[] HidroImages;
     public UnityEngine.UI.Image[] SolarImages;
+    public UnityEngine.UI.Image[] BiomassaImages;
 
+    public UnityEngine.UI.Image[] Inferno;
 
     public GameObject Upgrade0;
     public GameObject Upgrade1;
@@ -81,6 +86,32 @@ public class UIManager : MonoBehaviour
                     HidroImages[i].sprite = HidroSprites[0];
                 }
                 break;
+            case 3:
+                for (int i = 0; i < 3; i++)
+                {
+                    HidroImages[i].sprite = HidroSprites[1];
+                }
+                break;
+            case 4:
+                for (int i = 0; i < 3; i++)
+                {
+                    SolarImages[i].sprite = SolarSprites[0];
+                }
+                break;
+                //4 sprites p solar
+            case 5:
+                for (int i = 0; i < 3; i++)
+                {
+                    SolarImages[i].sprite = SolarSprites[1];
+                }
+                break;
+            case 6:
+                for (int i = 0; i < 3; i++)
+                {
+                    BiomassaImages[i].sprite = SolarSprites[2];
+                }
+                break;
+
         }   
         
     }

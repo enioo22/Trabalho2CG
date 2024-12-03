@@ -39,7 +39,7 @@ public class manager : MonoBehaviour
 
     double PowerValue = 0;
     double PowerGenerationPerClick;
-    double PowerPerClickEolica = 0, PowerPerClickHidro = 0, PowerPerClickBio = 0, PowerPerClickInferno = 0 , PowerPerClickSolar = 0, PowerPerClickGas = 0, PowerPerClickOleo = 0, PowerPerClickCarvao = 0, PowerPerClickNuke = 0;
+    double PowerPerClickEolica = 0, PowerPerClickHidro = 0, PowerPerClickBio = 0, PowerPerClickInferno = 0, PowerPerClickSolar = 0, PowerPerClickGas = 0, PowerPerClickOleo = 0, PowerPerClickCarvao = 0, PowerPerClickNuke = 0;
     float PowerGenerationPerSecond;
     double TotalClicks;
     double TotalCO2Emission;
@@ -55,13 +55,13 @@ public class manager : MonoBehaviour
     double[] UpgradeLevelRenovaveis = { 0, 0, 0, 0, 0 };
     double[] CO2EmissionPerUpgradeRenovaveis = { 13, 21, 0, 43, 10000 }; // Emissão em KCO₂/MW/h
 
-    string[] UpgradeNaoRenovaveis = { "Gás Natural", "Óleo", "Carvão", "Nuclear" };
-    double[] UpgradeCostNaoRenovaveis = { 500, 2000, 5000, 1000000 };
-    double[] UpgradeLevelNaoRenovaveis = { 0, 0, 0, 0 };
-    double[] CO2EmissionPerUpgradeNaoRenovaveis = { 486, 840, 1000, 13 }; // Emissão em KCO₂/MW/h
+    string[] UpgradeNaoRenovaveis = { "Gás Natural", "Petróleo", "Carvão", "Nuclear","Em breve" };
+    double[] UpgradeCostNaoRenovaveis = { 500, 2000, 5000, 1000000,0 };
+    double[] UpgradeLevelNaoRenovaveis = { 0, 0, 0, 0, 0 };
+    double[] CO2EmissionPerUpgradeNaoRenovaveis = { 486, 840, 1000, 13, 0 }; // Emissão em KCO₂/MW/h
 
     double upgradeVisualEolico1 = 0, upgradeVisualEolico2 = 0, upgradeVisualHidro1 = 0, upgradeVisualEolico3 = 0;
-
+    double upgradeVisualHidro2 = 0;
 
     public double getUpgradeCost(double InitialCost, int NumberOfUpgrades)
     {
@@ -72,10 +72,10 @@ public class manager : MonoBehaviour
 
     public void mainClick()
     {
-        this.TotalClicks += this.PowerGenerationPerClick;
-        this.TotalClicks += 10000000000;
-        this.PowerValue += this.PowerGenerationPerClick;
-        this.TotalClicksText.text = Math.Round(this.TotalClicks, 2).ToString();
+        TotalClicks += PowerGenerationPerClick;
+        TotalClicks += 10000000000;
+        PowerValue += PowerGenerationPerClick;
+        TotalClicksText.text = Math.Round(TotalClicks, 2).ToString();
         if (TotalClicks >= 1)
         {
             totalenergytext.SetActive(true);
@@ -83,17 +83,32 @@ public class manager : MonoBehaviour
         }
         if (TotalClicks >= 10)
         {
-            //dialogmanager.callDialog(0);
+            dialogmanager.callDialog(0);
             upgradesmenu1.SetActive(true);
         }
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < UpgradeRenovaveis.Length; i++)
         {
-            if (TotalClicks > UpgradeCostRenovaveis[i])
+            if (i == 4) // "Inferno"
             {
-                upgrades[i].SetActive(true);
+                // Só ativa se o CO2 emitido for maior ou igual a 3000
+                if (TotalCO2Emission >= 3000)
+                {
+                    upgrades[i].SetActive(true);
+                }
+                else
+                {
+                    upgrades[i].SetActive(false);
+                }
+            }
+            else
+            {
+                // Ativa os outros upgrades apenas baseado no custo
+                if (TotalClicks >= UpgradeCostRenovaveis[i])
+                {
+                    upgrades[i].SetActive(true);
+                }
             }
         }
-
     }
 
     public void onClickStartButton()
@@ -155,7 +170,7 @@ public class manager : MonoBehaviour
                 }
                 break;
             case 2:
-                if(upgradelevel < 6)
+                if (upgradelevel < 6)
                 {
                     GameObject.Find("/CanvasMain/Backgroundentities/Biomassa/corpo" + upgradelevel).SetActive(true);
                 }
@@ -164,6 +179,12 @@ public class manager : MonoBehaviour
                 if (upgradelevel < 6)
                 {
                     GameObject.Find("/CanvasMain/Backgroundentities/Solar/corpo" + upgradelevel).SetActive(true);
+                }
+                break;
+            case 4:
+                if (upgradelevel < 6)
+                {
+                    GameObject.Find("/CanvasMain/Backgroundentities/Inferno/corpo" + upgradelevel).SetActive(true);
                 }
                 break;
             default:
@@ -202,11 +223,12 @@ public class manager : MonoBehaviour
 
         double upgradelevel = UpgradeLevelNaoRenovaveis[position];
 
-            switch (position)
+        switch (position)
         {
             case 0:
-                if(upgradelevel < 4) { 
-                GameObject.Find("/CanvasMain/Backgroundentities/GasNatural/corpo" + upgradelevel).SetActive(true);
+                if (upgradelevel < 4)
+                {
+                    GameObject.Find("/CanvasMain/Backgroundentities/GasNatural/corpo" + upgradelevel).SetActive(true);
                 }
                 break;
 
@@ -217,13 +239,13 @@ public class manager : MonoBehaviour
                 }
                 break;
             case 2:
-                if(upgradelevel < 4)
+                if (upgradelevel < 4)
                 {
                     GameObject.Find("/CanvasMain/Backgroundentities/Carvao/corpo" + upgradelevel).SetActive(true);
                 }
                 break;
             case 3:
-                if(upgradelevel < 4)
+                if (upgradelevel < 4)
                 {
                     GameObject.Find("/CanvasMain/Backgroundentities/Nuclear/corpo" + upgradelevel).SetActive(true);
                 }
@@ -261,6 +283,21 @@ public class manager : MonoBehaviour
                 upgradeVisualEolico2 = 5;
 
                 break;
+            case 2: // Hidrelétrica
+                if (upgradeVisualHidro1 == 0) // Verifica se já foi comprado
+                {
+                    upgradeVisualHidro1 = 1; // Marca o upgrade como feito
+                    TotalClicks -= 1000000; // Subtrai o custo
+                }
+                break;
+            case 3:
+            if (upgradeVisualHidro2 == 0)
+            {
+                upgradeVisualHidro2 = 1;
+                TotalClicks -= 5000000;
+            }
+            break;
+
         }
 
     }
@@ -292,7 +329,7 @@ public class manager : MonoBehaviour
 
     }
     public void MakeUpgrade(int position)
-    {   
+    {
         CO2EmissionText.gameObject.SetActive(true);
         powerpersecondtext.SetActive(true);
         if (EnergyType == 0)
@@ -315,8 +352,14 @@ public class manager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 1; i < 6; i++)
+         if (UpgradeButtonText.Length != UpgradeRenovaveis.Length)
         {
+            Debug.LogError("Mismatch: UpgradeButtonText e UpgradeRenovaveis devem ter o mesmo tamanho.");
+        }
+
+        for (int i = 1; i < 6; i++)
+        {   
+            
             GameObject.Find("/CanvasMain/Backgroundentities/Eolicos/Eolico" + i).SetActive(false);
             GameObject.Find("/CanvasMain/Backgroundentities/Eolicos/Eolico" + i + "Pole").SetActive(false);
             GameObject.Find("/CanvasMain/Backgroundentities/Solar/corpo" + i).SetActive(false);
@@ -326,10 +369,10 @@ public class manager : MonoBehaviour
             }
 
         }
-        this.TotalClicks = 0;
-        this.PowerGenerationPerSecond = 0;
-        this.PowerGenerationPerClick = 1;
-        this.TotalCO2Emission = 0;
+        TotalClicks = 0;
+        PowerGenerationPerSecond = 0;
+        PowerGenerationPerClick = 1;
+        TotalCO2Emission = 0;
     }
 
     private double GetTotalCost(double baseCost, double currentLevel, int multiplier)
@@ -364,26 +407,31 @@ public class manager : MonoBehaviour
         UpgradeVisual1.interactable = TotalClicks >= 1000000 && UpgradeLevelRenovaveis[0] >= 100 && upgradeVisualEolico2 == 0;
 
         UpgradeVisual2.interactable = TotalClicks >= 1000000 && UpgradeLevelRenovaveis[1] >= 50 && upgradeVisualHidro1 == 0;
-        UpgradeVisual3.interactable = false;
+        UpgradeVisual3.interactable = TotalClicks >= 5000000 && UpgradeLevelRenovaveis[1] >= 100 && upgradeVisualHidro2 == 0;
+
+
 
         switch (EnergyType)
         {
             case 0:
                 for (int i = 0; i < UpgradeRenovaveis.Length; i++)
                 {
-                    UpgradeButtonText[i].text = $"{UpgradeRenovaveis[i]}\nNível: {UpgradeLevelRenovaveis[i]}\nCusto ({purchaseMultiplier}x): {GetNumeroFormatado(GetTotalCost(UpgradeCostRenovaveis[i], UpgradeLevelRenovaveis[i], purchaseMultiplier))}";
+                UpgradeButtonText[i].text = $"{UpgradeRenovaveis[i]}\nNível: {UpgradeLevelRenovaveis[i]}\nCusto ({purchaseMultiplier}x): {GetNumeroFormatado(GetTotalCost(UpgradeCostRenovaveis[i], UpgradeLevelRenovaveis[i], purchaseMultiplier))}";
 
-                    if (UpgradeRenovaveis[i] == "Inferno")
-                    {
-                        upgradeButton[i].interactable = TotalCO2Emission >= 3000;
-                    }
-                    else
-                    {
-                        upgradeButton[i].interactable = TotalClicks >= GetTotalCost(UpgradeCostRenovaveis[i], UpgradeLevelRenovaveis[i], purchaseMultiplier);
-                    }
-                    UpgradeButtonText[i].color = Color.black;
+                // Condição específica para o botão "Inferno"
+                if (UpgradeRenovaveis[i] == "Inferno")
+                {
+                    upgradeButton[i].interactable = TotalClicks >= GetTotalCost(UpgradeCostRenovaveis[i], UpgradeLevelRenovaveis[i], purchaseMultiplier) && TotalCO2Emission >= 3000;
+                    upgrades[i].SetActive(TotalCO2Emission >= 3000); // Mostrar ou esconder
                 }
-                break;
+                else
+                {
+                    upgradeButton[i].interactable = TotalClicks >= GetTotalCost(UpgradeCostRenovaveis[i], UpgradeLevelRenovaveis[i], purchaseMultiplier);
+                }
+
+                UpgradeButtonText[i].color = Color.black;
+            }
+            break;
 
             case 1:
                 for (int i = 0; i < UpgradeNaoRenovaveis.Length; i++)
